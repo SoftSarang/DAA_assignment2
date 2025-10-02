@@ -68,8 +68,10 @@ public class KadanesAlgorithm {
             }
             // Handle case where all elements are negative
             if (maxSum < 0) {
+                tracker.incrementAllocation();
                 return new SubarrayResult(maxElement, maxElementIndex, maxElementIndex);
             }
+            tracker.incrementAllocation();
             return new SubarrayResult(maxSum, start, end);
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new IllegalStateException("Array index out of bounds during processing: " + e.getMessage(), e);
