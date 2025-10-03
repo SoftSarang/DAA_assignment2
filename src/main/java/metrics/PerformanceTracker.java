@@ -2,13 +2,14 @@ package metrics;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
 
 public class PerformanceTracker {
     private long comparisons = 0;
     private long swaps = 0;
     private long accesses = 0;
     private long allocations = 0;
-    private long startTime = 0;
+    public long startTime = 0;
 
     /**
      * Starts the performance tracking timer.
@@ -46,19 +47,24 @@ public class PerformanceTracker {
     }
 
     /**
-     * Writes collected metrics to a CSV file.
+     * Writes collected metrics to a CSV file with headers if not present.
      * @param filePath Path to the CSV file.
      * @param n Input size for the benchmark.
-     * @param algorithm Name of the algorithm.
      * @throws IOException If file writing fails.
      */
-    public void writeToCSV(String filePath, int n, String algorithm) throws IOException {
+    public void writeToCSV(String filePath, int n) throws IOException {
         long timeNs = System.nanoTime() - startTime;
+        File file = new File(filePath);
+        boolean isNewFile = !file.exists() || file.length() == 0;
+
         try (FileWriter writer = new FileWriter(filePath, true)) {
             if (writer == null) {
                 throw new IOException("Failed to initialize FileWriter");
             }
-            writer.append(String.format("%d,%d,%d,%d,%d,%d,%s\n", n, timeNs, comparisons, swaps, accesses, allocations, algorithm));
+            if (isNewFile) {
+                writer.append("n,timeNs,comparisons,swaps,accesses,allocations\n");
+            }
+            writer.append(String.format("%d,%d,%d,%d,%d,%d\n", n, timeNs, comparisons, swaps, accesses, allocations));
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
             throw e; // Re-throw to allow caller to handle

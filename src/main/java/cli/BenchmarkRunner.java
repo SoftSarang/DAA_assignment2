@@ -31,11 +31,11 @@ public class BenchmarkRunner {
             tracker.start();
             alg.findMaxSubarraySum(nums, tracker);
             try {
-                tracker.writeToCSV("performance.csv", size, "Kadane's");
+                tracker.writeToCSV("results.csv", size);
             } catch (IOException e) {
-                System.err.println("Failed to write to performance.csv for size " + size + ": " + e.getMessage());
+                System.err.println("Failed to write to results.csv for size " + size + ": " + e.getMessage());
             }
         }
-        System.out.println("Benchmark completed. Results written to performance.csv.");
+        System.out.println("Benchmark completed. Results written to results.csv.");
     }
 }

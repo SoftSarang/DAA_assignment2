@@ -34,6 +34,13 @@ public class KadanesAlgorithm {
             throw new IllegalArgumentException("Input array cannot be empty");
         }
 
+        // Handle single-element array
+        if (nums.length == 1) {
+            tracker.incrementAccess();
+            tracker.incrementAllocation();
+            return new SubarrayResult(nums[0], 0, 0);
+        }
+
         int maxSum = nums[0];
         int currentSum = nums[0];
         int start = 0;
