@@ -10,12 +10,20 @@ public class PerformanceTracker {
     private long accesses = 0;
     private long allocations = 0;
     public long startTime = 0;
+    private long endTime = 0;
 
     /**
      * Starts the performance tracking timer.
      */
     public void start() {
         startTime = System.nanoTime();
+    }
+
+    /**
+     * Stops the timer and records the end time.
+     */
+    public void stop() {
+        endTime = System.nanoTime();
     }
 
     /**
@@ -53,7 +61,6 @@ public class PerformanceTracker {
      * @throws IOException If file writing fails.
      */
     public void writeToCSV(String filePath, int n) throws IOException {
-        long timeNs = System.nanoTime() - startTime;
         File file = new File(filePath);
         boolean isNewFile = !file.exists() || file.length() == 0;
 
@@ -64,6 +71,7 @@ public class PerformanceTracker {
             if (isNewFile) {
                 writer.append("n,timeNs,comparisons,swaps,accesses,allocations\n");
             }
+            long timeNs = endTime - startTime;
             writer.append(String.format("%d,%d,%d,%d,%d,%d\n", n, timeNs, comparisons, swaps, accesses, allocations));
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());

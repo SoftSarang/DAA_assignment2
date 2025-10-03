@@ -3,10 +3,10 @@ package cli;
 import algorithms.KadanesAlgorithm;
 import metrics.PerformanceTracker;
 import java.io.IOException;
+import java.util.Random;
 
 public class BenchmarkRunner {
     public static void main(String[] args) {
-        // Default sizes if no argument provided or if parsing fails
         int[] sizes = {100, 1000, 10000, 100000};
         if (args.length > 0) {
             sizes = new int[args.length];
@@ -15,21 +15,31 @@ public class BenchmarkRunner {
                     sizes[i] = Integer.parseInt(args[i]);
                 } catch (NumberFormatException e) {
                     System.err.println("Invalid size argument at index " + i + ": '" + args[i] + "'. Using default sizes for this position.");
-                    sizes[i] = (i < 4) ? new int[]{100, 1000, 10000, 100000}[i] : 100; // Fallback to default or 100
+                    sizes[i] = (i < 4) ? new int[]{100, 1000, 10000, 100000}[i] : 100;
                 }
             }
         }
 
         KadanesAlgorithm alg = new KadanesAlgorithm();
+        Random rand = new Random();
+
         for (int size : sizes) {
             int[] nums = new int[size];
-            // Generate random numbers with negatives
             for (int i = 0; i < size; i++) {
-                nums[i] = (int) (Math.random() * 100 - 50); // Random with negatives
+                nums[i] = rand.nextInt(100) - 50; // Consistent random generation
             }
+
+            // Multiple warmups
+            for (int i = 0; i < 5; i++) { // 5 warmups
+                PerformanceTracker warmupTracker = new PerformanceTracker();
+                alg.findMaxSubarraySum(nums, warmupTracker);
+            }
+
+            // Measurement
             PerformanceTracker tracker = new PerformanceTracker();
             tracker.start();
-            alg.findMaxSubarraySum(nums, tracker);
+            KadanesAlgorithm.SubarrayResult result = alg.findMaxSubarraySum(nums, tracker);
+            tracker.stop();
             try {
                 tracker.writeToCSV("results.csv", size);
             } catch (IOException e) {
