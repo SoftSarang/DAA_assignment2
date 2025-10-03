@@ -21,24 +21,19 @@ public class BenchmarkTest {
 
     private int[] nums;
 
-
-    private KadanesAlgorithm alg;
-    private PerformanceTracker tracker;
-
     @Setup
     public void setup() {
-        alg = new KadanesAlgorithm();
-        tracker = new PerformanceTracker();
         nums = new int[size];
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
-            nums[i] = rand.nextInt(100) - 50;
+            nums[i] = rand.nextInt(100) - 50; // Random with negatives
         }
     }
 
     @Benchmark
     public void benchmarkKadane(Blackhole blackhole) {
-        KadanesAlgorithm.SubarrayResult result = alg.findMaxSubarraySum(nums, tracker);
+        KadanesAlgorithm alg = new KadanesAlgorithm();
+        KadanesAlgorithm.SubarrayResult result = alg.findMaxSubarraySum(nums, new PerformanceTracker());
         blackhole.consume(result);
     }
 
