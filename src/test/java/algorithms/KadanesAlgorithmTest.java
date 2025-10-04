@@ -1,14 +1,20 @@
 package algorithms;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import metrics.PerformanceTracker;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class KadanesAlgorithmTest {
+    private KadanesAlgorithm alg;
+    private PerformanceTracker tracker;
 
-    private final KadanesAlgorithm alg = new KadanesAlgorithm();
-    private final PerformanceTracker tracker = new PerformanceTracker();
+    @BeforeEach
+    void setUp() {
+        alg = new KadanesAlgorithm();
+        tracker = new PerformanceTracker();
+    }
 
     @Test
     void testMaxSubarraySum() {
@@ -28,12 +34,21 @@ public class KadanesAlgorithmTest {
     }
 
     @Test
-    void testSingleElement() {
+    void testSingleElementPositive() {
         int[] nums = {5};
-        KadanesAlgorithm.SubarrayResult result = alg.findMaxSubarraySum(nums, tracker);
-        assertEquals(5, result.maxSum, "Single element should be the maximum sum");
-        assertEquals(0, result.start, "Start index should be 0");
-        assertEquals(0, result.end, "End index should be 0");
+        KadanesAlgorithm.SubarrayResult res = alg.findMaxSubarraySum(nums, tracker);
+        assertEquals(5, res.maxSum);
+        assertEquals(0, res.start);
+        assertEquals(0, res.end);
+    }
+
+    @Test
+    void testSingleElementNegative() {
+        int[] nums = {-5};
+        KadanesAlgorithm.SubarrayResult res = alg.findMaxSubarraySum(nums, tracker);
+        assertEquals(-5, res.maxSum);
+        assertEquals(0, res.start);
+        assertEquals(0, res.end);
     }
 
     @Test
@@ -43,6 +58,15 @@ public class KadanesAlgorithmTest {
         assertEquals(-1, result.maxSum, "Maximum sum should be the largest negative element");
         assertEquals(0, result.start, "Start index should be 0");
         assertEquals(0, result.end, "End index should be 0");
+    }
+
+    @Test
+    void testAllPositive() {
+        int[] nums = {1, 2, 3};
+        KadanesAlgorithm.SubarrayResult res = alg.findMaxSubarraySum(nums, tracker);
+        assertEquals(6, res.maxSum);
+        assertEquals(0, res.start);
+        assertEquals(2, res.end);
     }
 
     @Test
@@ -70,5 +94,14 @@ public class KadanesAlgorithmTest {
         assertEquals(15, result.maxSum, "Maximum sum should be the entire array");
         assertEquals(0, result.start, "Start index should be 0");
         assertEquals(4, result.end, "End index should be 4");
+    }
+
+    @Test
+    void testAllZeros() {
+        int[] nums = {0, 0, 0};
+        KadanesAlgorithm.SubarrayResult res = alg.findMaxSubarraySum(nums, tracker);
+        assertEquals(0, res.maxSum);
+        assertEquals(0, res.start);
+        assertEquals(2, res.end); // Since all positive check treats 0 as positive
     }
 }

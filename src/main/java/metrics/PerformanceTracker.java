@@ -4,6 +4,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
+/**
+ * Tracks performance metrics for algorithm runs, including time, operations, and memory.
+ */
 public class PerformanceTracker {
     private long comparisons = 0;
     private long swaps = 0;

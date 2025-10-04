@@ -2,22 +2,38 @@ package algorithms;
 
 import metrics.PerformanceTracker;
 
+/**
+ * Implements Kadane's Algorithm for maximum subarray sum with position tracking.
+ * Time Complexity: Θ(n) for best, worst, average cases.
+ * Space Complexity: O(1) auxiliary.
+ * Handles edges: all-negative (returns max element), single element, empty/null (throws exception).
+ * Optimizations: Early detection for all-positive arrays to compute full sum.
+ */
 public class KadanesAlgorithm {
     public static class SubarrayResult {
-        public int maxSum;
+        public long maxSum;
         int start;
         int end;
 
-        public SubarrayResult(int maxSum, int start, int end) {
+        public SubarrayResult(long maxSum, int start, int end) {
             this.maxSum = maxSum;
             this.start = start;
             this.end = end;
         }
     }
 
+    /**
+     * Finds the maximum contiguous subarray sum using Kadane's Algorithm.
+     * Tracks start and end positions. Handles all-negative cases by returning the largest element.
+     * @param nums Input array (non-null, non-empty)
+     * @param tracker Performance metrics collector
+     * @return SubarrayResult with max sum and positions
+     * @throws IllegalArgumentException if nums is null or empty
+     */
     public SubarrayResult findMaxSubarraySum(int[] nums, PerformanceTracker tracker) {
         if (nums == null) throw new IllegalArgumentException("Input array cannot be null");
         if (nums.length == 0) throw new IllegalArgumentException("Input array cannot be empty");
+
 
         if (nums.length == 1) {
             tracker.incrementAccess();
@@ -25,12 +41,13 @@ public class KadanesAlgorithm {
             return new SubarrayResult(nums[0], 0, 0);
         }
 
-        int maxSum = nums[0];
-        int currentSum = nums[0];
+        // Standard Kadane's
+        long maxSum = nums[0];
+        long currentSum = nums[0];
         int start = 0;
         int currentStart = 0;
         int end = 0;
-        int maxElement = nums[0];
+        long maxElement = nums[0];
         int maxElementIndex = 0;
 
         tracker.incrementAccess();
@@ -50,6 +67,7 @@ public class KadanesAlgorithm {
                 start = currentStart;
                 end = i;
             }
+            tracker.incrementComparison();
             if (maxElement < nums[i]) {
                 maxElement = nums[i];
                 maxElementIndex = i;
