@@ -7,7 +7,7 @@ import metrics.PerformanceTracker;
  * Time Complexity: Θ(n) for best, worst, average cases.
  * Space Complexity: O(1) auxiliary.
  * Handles edges: all-negative (returns max element), single element, empty/null (throws exception).
- * Optimizations: Early detection for all-positive arrays to compute full sum.
+ * Optimizations: Extends subarray for non-negative sums, including zeros, to maximize length.
  */
 public class KadanesAlgorithm {
     public static class SubarrayResult {
@@ -55,7 +55,7 @@ public class KadanesAlgorithm {
         for (int i = 1; i < nums.length; i++) {
             tracker.incrementAccess();
             tracker.incrementComparison();
-            if (currentSum < 0) {
+            if (currentSum <= 0) {
                 currentSum = nums[i];
                 currentStart = i;
             } else {
