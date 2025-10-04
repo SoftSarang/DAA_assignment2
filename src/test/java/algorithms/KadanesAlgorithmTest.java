@@ -102,6 +102,6 @@ public class KadanesAlgorithmTest {
         KadanesAlgorithm.SubarrayResult res = alg.findMaxSubarraySum(nums, tracker);
         assertEquals(0, res.maxSum);
         assertEquals(0, res.start);
-        assertEquals(2, res.end); // Since all positive check treats 0 as positive
+        assertEquals(0, res.end);
     }
 }
