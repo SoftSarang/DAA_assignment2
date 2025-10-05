@@ -30,7 +30,6 @@ Group Repositories:
    git clone https://github.com/SoftSarang/DAA_assignment2.git
    git clone https://github.com/cybertora/BoyerMooreMajorityVote.git
    git clone https://github.com/Swoksaar0/DAA_2nd_Assignment.git
-
    ```
 2. Build with Maven:
    ```
