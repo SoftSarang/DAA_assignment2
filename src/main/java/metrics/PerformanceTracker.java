@@ -15,6 +15,7 @@ public class PerformanceTracker {
     public long startTime = 0;
     private long endTime = 0;
 
+
     /**
      * Starts the performance tracking timer.
      */
@@ -63,7 +64,7 @@ public class PerformanceTracker {
      * @param n Input size for the benchmark.
      * @throws IOException If file writing fails.
      */
-    public void writeToCSV(String filePath, int n) throws IOException {
+    public void writeToCSV(String filePath, int n, String type) throws IOException {
         File file = new File(filePath);
         boolean isNewFile = !file.exists() || file.length() == 0;
 
@@ -72,10 +73,10 @@ public class PerformanceTracker {
                 throw new IOException("Failed to initialize FileWriter");
             }
             if (isNewFile) {
-                writer.append("n,timeNs,comparisons,swaps,accesses,allocations\n");
+                writer.append("n,timeNs,comparisons,swaps,accesses,allocations, type\n");
             }
             long timeNs = endTime - startTime;
-            writer.append(String.format("%d,%d,%d,%d,%d,%d\n", n, timeNs, comparisons, swaps, accesses, allocations));
+            writer.append(String.format("%d,%d,%d,%d,%d,%d,%s\n", n, timeNs, comparisons, swaps, accesses, allocations, type));
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());
             throw e; // Re-throw to allow caller to handle

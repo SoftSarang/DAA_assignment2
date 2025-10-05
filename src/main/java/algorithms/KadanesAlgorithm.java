@@ -24,7 +24,7 @@ public class KadanesAlgorithm {
 
     /**
      * Finds the maximum contiguous subarray sum using Kadane's Algorithm.
-     * Tracks start and end positions. Handles all-negative cases by returning the largest element.
+     * Tracks start and end positions.
      * @param nums Input array (non-null, non-empty)
      * @param tracker Performance metrics collector
      * @return SubarrayResult with max sum and positions
@@ -47,11 +47,9 @@ public class KadanesAlgorithm {
         int start = 0;
         int currentStart = 0;
         int end = 0;
-        long maxElement = nums[0];
-        int maxElementIndex = 0;
 
         tracker.incrementAccess();
-
+        // int[] nums = {2, -1, -4};
         for (int i = 1; i < nums.length; i++) {
             tracker.incrementAccess();
             tracker.incrementComparison();
@@ -67,16 +65,6 @@ public class KadanesAlgorithm {
                 start = currentStart;
                 end = i;
             }
-            tracker.incrementComparison();
-            if (maxElement < nums[i]) {
-                maxElement = nums[i];
-                maxElementIndex = i;
-            }
-        }
-
-        if (maxSum < 0) {
-            tracker.incrementAllocation();
-            return new SubarrayResult(maxElement, maxElementIndex, maxElementIndex);
         }
         tracker.incrementAllocation();
         return new SubarrayResult(maxSum, start, end);
